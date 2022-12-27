@@ -1,0 +1,31 @@
+import pgn
+import mxl
+
+def parse_pgn_to_mxl(pgn_file, mxl_file):
+    # parse the pgn file into a chess game object
+    game = pgn.read_game(pgn_file)
+
+    # create a new mxl document
+    doc = mxl.Document()
+
+    # get the moves from the game
+    moves = game.main_line()
+
+    # iterate through the moves and add them to the mxl document
+    for move in moves:
+        # create a new mxl measure for each move
+        measure = mxl.Measure()
+
+        # add the move notation to the measure as a chord
+        chord = mxl.Chord(move.uci())
+        measure.add(chord)
+
+        # add the measure to the document
+        doc.add(measure)
+
+    # write the mxl document to the output file
+    with open(mxl_file, 'w') as f:
+        doc.write(f)
+
+# example usage: parse a pgn file named 'game.pgn' to an mxl file named 'game.mxl'
+parse_pgn_to_mxl('game.pgn', 'game.mxl')
